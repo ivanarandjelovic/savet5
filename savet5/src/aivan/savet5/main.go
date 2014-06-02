@@ -2,7 +2,7 @@ package main
 
 import (
 	. "aivan/savet5/db"
-	//	"aivan/savet5/web"
+	"aivan/savet5/web"
 	"fmt"
 	"github.com/gorilla/mux"
 	//	"log"
@@ -41,6 +41,9 @@ func main() {
 
 	//r.HandleFunc("/products", ProductsHandler)
 	//r.HandleFunc("/articles", ArticlesHandler)
+
+	r.HandleFunc("/login", web.LoginHandler).Methods("POST")
+
 
 	http.Handle("/", r)
 
