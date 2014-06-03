@@ -1,24 +1,25 @@
 package web
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
-	"log"
 )
 
 type loginForm struct {
-    username string
-    password string
+	Email    string
+	Password string
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	//r.ParseForm()
-	log.Println(r.PostForm)
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	log.Println(r.PostForm)
+	decoder := json.NewDecoder(r.Body)
+	var l loginForm
+	err := decoder.Decode(&l)
+	if err != nil {
+		panic(err)
+	}
 
-	fmt.Println(fmt.Sprintln("LoginHandler called with u:"+username+" and p:(len)", len(password)))
+	fmt.Println(fmt.Sprintln("LoginHandler called with u:"+l.Email+" and p:(len)", len(l.Password)))
 
 	fmt.Fprint(w, "")
 }
