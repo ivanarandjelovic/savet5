@@ -28,5 +28,9 @@ func init() {
 	DB.DB().Ping()
 
 	// By default, table name is plural of struct type, you can use struct type as table name with:
-	//db.SingularTable(true)
+	// IvanA: I use plural which is default, but set it anyway just to be sure (if default is ever changed)
+	DB.SingularTable(false)
+	
+	// we need logging, at least in development, and probbaly later as well:
+	DB.LogMode(true)
 }

@@ -1,10 +1,11 @@
 package web
 
 import (
+	"aivan/savet5/db/user"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"log"
+	"net/http"
 )
 
 type loginForm struct {
@@ -22,5 +23,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Println(fmt.Sprintln("LoginHandler called with u:"+l.Email+" and p:(len)", len(l.Password)))
 
-	fmt.Fprint(w, "")
+	user, err := user.Login(l.Email, l.Password)
+
+	if err != nil {
+		http.NotFound(w,r)
+	} else {
+		encoder := json.NewEncoder(w)
+		encoder.Encode(user)
+		//fmt.Fprint(w, user)
+	}
 }
