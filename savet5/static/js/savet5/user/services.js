@@ -21,7 +21,7 @@ define([ "angular", "./controllers", "ui-bootstrap", "ui-bootstrap-tpls", "commo
 									// in a real app we could use the token to
 									// fetch the
 									// user data
-									return $http.get("/userForToken/", token).then(
+									return $http.get("/currentUser",{"token": token}).then(
 													function(response) {
 														user = response.data; // Extract
 														// user

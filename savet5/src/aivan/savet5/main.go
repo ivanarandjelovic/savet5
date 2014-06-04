@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	//	"log"
 	"net/http"
+	"github.com/gorilla/context"
 )
 
 func init() {
@@ -43,11 +44,12 @@ func main() {
 	//r.HandleFunc("/articles", ArticlesHandler)
 
 	r.HandleFunc("/login", web.LoginHandler).Methods("POST")
+	r.HandleFunc("/currentUser", web.CurrentUserHandler).Methods("GET")
 
 
 	http.Handle("/", r)
 
-	e := http.ListenAndServe(":8080", r)
+	e := http.ListenAndServe(":8080", context.ClearHandler(r))
 	if e != nil {
 		println(e.Error())
 	}
