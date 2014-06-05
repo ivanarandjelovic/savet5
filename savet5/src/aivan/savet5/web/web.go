@@ -26,6 +26,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	user, err := user.Login(l.Email, l.Password)
 
 	if err != nil {
+		log.Println("returning NotFound for login")
 		http.NotFound(w,r)
 	} else {
 		encoder := json.NewEncoder(w)

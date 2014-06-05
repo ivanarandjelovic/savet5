@@ -29,8 +29,9 @@ type UserError struct {
 func Login(email string, password string) (User, error) {
 	var user User
 	var totalCount uint32
-	//DB.Where("email = ? and password = ?", email, password).First(&user)
-	if DB.First(&user).RecordNotFound() {
+	
+	if DB.Where("email = ? and password = ?", email, password).First(&user).RecordNotFound() {
+		log.Println("user module, login failed")
 		return user, errors.New("User not found!")
 	}
 	//	if user == nil {
