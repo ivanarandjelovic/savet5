@@ -44,6 +44,7 @@ func main() {
 	//r.HandleFunc("/articles", ArticlesHandler)
 
 	r.HandleFunc("/login", web.LoginHandler).Methods("POST")
+	r.HandleFunc("/logout", web.LogoutHandler).Methods("POST")
 	r.HandleFunc("/currentUser", web.CurrentUserHandler).Methods("GET")
 
 

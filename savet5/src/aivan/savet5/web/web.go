@@ -4,13 +4,19 @@ import (
 	"aivan/savet5/db/user"
 	"encoding/json"
 	"fmt"
-	"github.com/dchest/uniuri"
+	//"github.com/dchest/uniuri"
+	"encoding/gob"
+	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 	"log"
 	"net/http"
 )
 
-var store = sessions.NewCookieStore([]byte("molto-secreto"))
+var store = sessions.NewFilesystemStore("/home/aivan/git/savet5/savet5/sessions", securecookie.GenerateRandomKey(32), securecookie.GenerateRandomKey(32))
+
+func init() {
+	gob.Register(user.User{})
+}
 
 type loginForm struct {
 	Email    string
@@ -38,38 +44,60 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		// User logged in OK:
 		// Get a session.
-		sessKey := uniuri.New()
-		session, _ := store.Get(r, sessKey)
+		//sessKey := uniuri.New()
+		session, _ := store.Get(r, "XSRF-TOKEN")
 		session.Values["user"] = user
-		cookie := sessions.NewCookie("XSRF-TOKEN", sessKey, &(sessions.Options{Path: "/", MaxAge: 30 * 60, HttpOnly: true}))
-		http.SetCookie(w, cookie)
-		session.Save(r, w)
+		log.Println("Session value user set to:", session.Values["user"])
+		//cookie := sessions.NewCookie("XSRF-TOKEN", sessKey, &(sessions.Options{Path: "/", MaxAge: 30 * 60, HttpOnly: true}))
+		//http.SetCookie(w, cookie)
+		err := session.Save(r, w)
+		if err != nil {
+			log.Println("Session save failed! message: ", err)
+		}
+		log.Println("session:", session)
 		encoder := json.NewEncoder(w)
-		encoder.Encode(tokenStruct{sessKey})
+		encoder.Encode(tokenStruct{session.ID})
 		//fmt.Fprint(w, user)
 	}
 }
 
 func CurrentUserHandler(w http.ResponseWriter, r *http.Request) {
-	
-	encoder := json.NewEncoder(w)
-	
 
 	log.Println("Current user called")
 
-	token := r.FormValue("token")
+	session, _ := store.Get(r, "XSRF-TOKEN")
 
-	if len(token) == 0 {
-		log.Println("No token!")
-		encoder.Encode(user.User{})
+	log.Println("session:", session)
+
+	user := session.Values["user"]
+
+	if user == nil {
+		log.Println("No user in session")
+		http.Error(w, "401 No current user", 401)
 	} else {
 
-		log.Println("token:", token)
+		log.Println("session:", session)
+		log.Println("user:", user)
 
-		session, _ := store.Get(r, token)
-		
-		log.Println("user:", session.Values["user"])
-
-		encoder.Encode(session.Values["user"])
+		encoder := json.NewEncoder(w)
+		encoder.Encode(user)
 	}
+}
+
+func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+
+	log.Println("Logout called")
+
+	session, _ := store.Get(r, "XSRF-TOKEN")
+
+	log.Println("session:", session)
+
+	//Delete session
+	session.Options.MaxAge = -1
+
+	err := session.Save(r, w)
+	if err != nil {
+		log.Println("Session save failed during logout! message: ", err)
+	}
+
 }
