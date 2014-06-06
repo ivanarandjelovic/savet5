@@ -1,6 +1,7 @@
 package web
 
 import (
+	"aivan/savet5/db/savet"
 	"aivan/savet5/db/user"
 	"encoding/json"
 	"fmt"
@@ -99,5 +100,24 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Session save failed during logout! message: ", err)
 	}
+}
+
+func SavetHandler(w http.ResponseWriter, r *http.Request) {
+
+	log.Println("SavetHandler called")
+
+	session, _ := store.Get(r, "XSRF-TOKEN")
+
+	log.Println("session:", session)
+
+	if session.Values["user"] == nil {
+		http.Error(w, "401 Not authorised", 401)
+		return
+	}
+
+	saveti, _ := savet.List()
+
+	encoder := json.NewEncoder(w)
+	encoder.Encode(saveti)
 
 }

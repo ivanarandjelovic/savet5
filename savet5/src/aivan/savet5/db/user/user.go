@@ -29,7 +29,7 @@ type UserError struct {
 func Login(email string, password string) (User, error) {
 	var user User
 	//DB.Where("email = ? and password = ?", email, password).First(&user)
-	if DB.First(&user).RecordNotFound() {
+	if DB.Where("email = ? and password = ?", email, password).First(&user).RecordNotFound() {
 		return user, errors.New("User not found!")
 	}
 	//	if user == nil {
