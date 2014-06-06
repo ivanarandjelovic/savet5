@@ -12,7 +12,7 @@ import (
 	"net/http"
 )
 
-var store = sessions.NewFilesystemStore("/home/aivan/git/savet5/savet5/sessions", securecookie.GenerateRandomKey(32), securecookie.GenerateRandomKey(32))
+var store = sessions.NewFilesystemStore("", securecookie.GenerateRandomKey(32))
 
 func init() {
 	gob.Register(user.User{})
