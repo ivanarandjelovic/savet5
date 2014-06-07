@@ -9,7 +9,7 @@ import (
 
 var counter func() int
 
-func init() {
+func init() { 
 	counter = func() func() int {
 		counter := 0
 		return func() int {
