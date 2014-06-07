@@ -28,8 +28,9 @@ type UserError struct {
 //Try to find the user based on email and pass, return the user if found, nil otherwise
 func Login(email string, password string) (User, error) {
 	var user User
-	//DB.Where("email = ? and password = ?", email, password).First(&user)
+
 	if DB.Where("email = ? and password = ?", email, password).First(&user).RecordNotFound() {
+		log.Println("user module, login failed")
 		return user, errors.New("User not found!")
 	}
 	//	if user == nil {

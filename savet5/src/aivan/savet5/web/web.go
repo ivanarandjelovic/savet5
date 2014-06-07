@@ -44,7 +44,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	user, err := user.Login(l.Email, l.Password)
 
 	if err != nil {
-		http.NotFound(w, r)
+		log.Println("returning NotFound for login")
+		http.NotFound(w,r)
 	} else {
 		// User logged in OK:
 		// Get a session.

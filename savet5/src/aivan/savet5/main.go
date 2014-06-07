@@ -6,7 +6,7 @@ import (
 	"aivan/savet5/web/live"
 	"fmt"
 	"github.com/gorilla/mux"
-	//	"log"
+	"log"
 	"net/http"
 	"github.com/gorilla/context"
 	"code.google.com/p/go.net/websocket"
@@ -23,6 +23,10 @@ func main() {
 	fmt.Println("Ziv sam!")
 	//DB.DB().Ping()
 	fmt.Println(DB)
+	if(DB.DB().Ping() != nil) {
+		log.Panicln("No DB connection!")
+		//Will exit after this Fatal anyway, no need for return
+	}
 
 	r := mux.NewRouter()
 	r.Handle("/", http.RedirectHandler("/html/", 301))
@@ -31,19 +35,6 @@ func main() {
 		f2 := "/"+f+"/"
 		r.PathPrefix(f2).Handler(http.StripPrefix(f2, http.FileServer(http.Dir(HomeFolder+f2))))
 	}
-
-	//r.PathPrefix("/html/").Handler(http.StripPrefix("/html/", http.FileServer(http.Dir(HomeFolder+"html/"))))
-	//r.PathPrefix("/js/").Handler(http.StripPrefix("/js/", http.FileServer(http.Dir(HomeFolder+"js/"))))
-	//r.PathPrefix("/css/").Handler(http.StripPrefix("/css/", http.FileServer(http.Dir(HomeFolder+"css/"))))
-
-	//r.Handle("/html/", http.StripPrefix("/html/", http.FileServer(http.Dir("static/html"))))
-	//r.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("static/js"))))
-	//r.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
-	//r.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("wwwroot"))))
-	//r.HandleFunc("/web", web.HomeHandler).Methods("GET", "POST")
-
-	//r.HandleFunc("/products", ProductsHandler)
-	//r.HandleFunc("/articles", ArticlesHandler)
 
 	r.HandleFunc("/login", web.LoginHandler).Methods("POST")
 	r.HandleFunc("/logout", web.LogoutHandler).Methods("POST")
@@ -56,7 +47,6 @@ func main() {
 	r.HandleFunc("/stanari/{savetId}", web.GetStanariHandler).Methods("GET")
 	
 	r.Handle("/live/getSecured", websocket.Handler(live.WebSocketHandler))
-	
 	
 	http.Handle("/", r)
 
