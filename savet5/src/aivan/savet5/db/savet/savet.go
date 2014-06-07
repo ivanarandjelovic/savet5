@@ -10,9 +10,9 @@ import (
 
 // User object
 type Savet struct {
-	Id        int64 `json:"id"`
-	Name      string `json:"name"`
-	Address   string `json:"address"`
+	Id        int64     `json:"id"`
+	Name      string    `json:"name"`
+	Address   string    `json:"address"`
 	CreatedAt time.Time `json:"createdAt"`
 }
 
@@ -39,7 +39,7 @@ func Create(savet Savet) error {
 }
 
 func Get(id int64) Savet {
-	savet := Savet{Id:id}
+	savet := Savet{Id: id}
 	DB.Find(&savet)
-	return savet;
+	return savet
 }

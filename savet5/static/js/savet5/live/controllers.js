@@ -17,7 +17,7 @@
           return;
         }
         console.log("Connecting to ws ...");
-        $scope.websocket = new WebSocket("TODO: websocket URL");
+        $scope.websocket = new WebSocket("ws://"+document.location.hostname+":"+document.location.port+"/live/getSecured");
         $scope.websocket.onopen = function(event) {
           return $scope.$apply(function() {
             return $scope.message = "WS is open!";

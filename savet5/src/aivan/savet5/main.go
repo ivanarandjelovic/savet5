@@ -3,11 +3,13 @@ package main
 import (
 	. "aivan/savet5/db"
 	"aivan/savet5/web"
+	"aivan/savet5/web/live"
 	"fmt"
 	"github.com/gorilla/mux"
 	//	"log"
 	"net/http"
 	"github.com/gorilla/context"
+	"code.google.com/p/go.net/websocket"
 )
 
 func init() {
@@ -52,6 +54,9 @@ func main() {
 	r.HandleFunc("/savet/{id}", web.GetSavetHandler).Methods("GET")
 
 	r.HandleFunc("/stanari/{savetId}", web.GetStanariHandler).Methods("GET")
+	
+	r.Handle("/live/getSecured", websocket.Handler(live.WebSocketHandler))
+	
 	
 	http.Handle("/", r)
 
