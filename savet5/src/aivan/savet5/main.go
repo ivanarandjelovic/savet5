@@ -48,7 +48,11 @@ func main() {
 	r.HandleFunc("/currentUser", web.CurrentUserHandler).Methods("GET")
 	
 	r.HandleFunc("/savet", web.SavetHandler).Methods("GET")
+	r.HandleFunc("/savet", web.SaveSavetHandler).Methods("POST")
+	r.HandleFunc("/savet/{id}", web.GetSavetHandler).Methods("GET")
 
+	r.HandleFunc("/stanari/{savetId}", web.GetStanariHandler).Methods("GET")
+	
 	http.Handle("/", r)
 
 	e := http.ListenAndServe(":8080", context.ClearHandler(r))

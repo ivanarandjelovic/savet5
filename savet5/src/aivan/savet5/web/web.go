@@ -2,15 +2,18 @@ package web
 
 import (
 	"aivan/savet5/db/savet"
+	"aivan/savet5/db/stanari"
 	"aivan/savet5/db/user"
 	"encoding/json"
 	"fmt"
 	//"github.com/dchest/uniuri"
 	"encoding/gob"
+	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 var store = sessions.NewFilesystemStore("", securecookie.GenerateRandomKey(32))
@@ -120,4 +123,41 @@ func SavetHandler(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
 	encoder.Encode(saveti)
 
+}
+
+func SaveSavetHandler(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var s savet.Savet
+	err := decoder.Decode(&s)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Println("SaveSavetHandler called with savet:", s)
+
+	err = savet.Create(s)
+
+	if err != nil {
+		http.NotFound(w, r)
+	}
+}
+
+func GetSavetHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, _ := strconv.ParseInt(vars["id"], 10, 64)
+	savet := savet.Get(id)
+	encoder := json.NewEncoder(w)
+	encoder.Encode(savet)
+}
+
+func GetStanariHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	savetId, _ := strconv.ParseInt(vars["savetId"], 10, 64)
+	savet, err := stanari.Get(savetId)
+	if err != nil {
+		log.Println("Error", err)
+		http.NotFound(w, r)
+	}
+	encoder := json.NewEncoder(w)
+	encoder.Encode(savet)
 }

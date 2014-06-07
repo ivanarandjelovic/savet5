@@ -18,7 +18,7 @@ type User struct {
 	Role        string `json:"role"`
 }
 
-func (u User) TableName() string {
+func (_ User) TableName() string {
 	return "Users"
 }
 
