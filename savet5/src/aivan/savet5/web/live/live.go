@@ -1,6 +1,9 @@
 package live
 
 import (
+	"aivan/savet5/db/user"
+	"aivan/savet5/web"
+	"aivan/savet5/web/secure"
 	"code.google.com/p/go.net/websocket"
 	//	"io"
 	"fmt"
@@ -9,7 +12,7 @@ import (
 
 var counter func() int
 
-func init() { 
+func init() {
 	counter = func() func() int {
 		counter := 0
 		return func() int {
@@ -20,11 +23,9 @@ func init() {
 	}()
 }
 
-func WebSocketHandler(ws *websocket.Conn) {
+var WebSocketHandler = secure.SecureWSHandler(web.Store, func(ws *websocket.Conn, user user.User) {
 	log.Println("New websocket connection!")
-	//go handleWS(ws)
-	//	io.Copy(ws, ws)
-	
+
 	for {
 		var text string
 		err := websocket.Message.Receive(ws, &text)
@@ -47,4 +48,4 @@ func WebSocketHandler(ws *websocket.Conn) {
 			return
 		}
 	}
-}
+})
