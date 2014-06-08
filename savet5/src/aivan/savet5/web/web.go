@@ -4,6 +4,7 @@ import (
 	"aivan/savet5/db/savet"
 	"aivan/savet5/db/stanari"
 	"aivan/savet5/db/user"
+	"aivan/savet5/web/secure"
 	"encoding/json"
 	"fmt"
 	//"github.com/dchest/uniuri"
@@ -16,7 +17,7 @@ import (
 	"strconv"
 )
 
-var store = sessions.NewFilesystemStore("", securecookie.GenerateRandomKey(32))
+var Store = sessions.NewFilesystemStore("", securecookie.GenerateRandomKey(32))
 
 func init() {
 	gob.Register(user.User{})
@@ -45,12 +46,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Println("returning NotFound for login")
-		http.NotFound(w,r)
+		http.NotFound(w, r)
 	} else {
 		// User logged in OK:
 		// Get a session.
 		//sessKey := uniuri.New()
-		session, _ := store.Get(r, "XSRF-TOKEN")
+		session, _ := Store.Get(r, "XSRF-TOKEN")
 		session.Values["user"] = user
 		log.Println("Session value user set to:", session.Values["user"])
 		//cookie := sessions.NewCookie("XSRF-TOKEN", sessKey, &(sessions.Options{Path: "/", MaxAge: 30 * 60, HttpOnly: true}))
@@ -66,34 +67,16 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func CurrentUserHandler(w http.ResponseWriter, r *http.Request) {
-
-	log.Println("Current user called")
-
-	session, _ := store.Get(r, "XSRF-TOKEN")
-
-	log.Println("session:", session)
-
-	user := session.Values["user"]
-
-	if user == nil {
-		log.Println("No user in session")
-		http.Error(w, "401 No current user", 401)
-	} else {
-
-		log.Println("session:", session)
-		log.Println("user:", user)
-
-		encoder := json.NewEncoder(w)
-		encoder.Encode(user)
-	}
-}
+var CurrentUserHandler = secure.SecureHandler(Store, func(w http.ResponseWriter, r *http.Request, user user.User) {
+	encoder := json.NewEncoder(w)
+	encoder.Encode(user)
+})
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Logout called")
 
-	session, _ := store.Get(r, "XSRF-TOKEN")
+	session, _ := Store.Get(r, "XSRF-TOKEN")
 
 	log.Println("session:", session)
 
@@ -106,27 +89,16 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func SavetHandler(w http.ResponseWriter, r *http.Request) {
-
-	log.Println("SavetHandler called")
-
-	session, _ := store.Get(r, "XSRF-TOKEN")
-
-	log.Println("session:", session)
-
-	if session.Values["user"] == nil {
-		http.Error(w, "401 Not authorised", 401)
-		return
-	}
-
+var SavetHandler = secure.SecureHandler(Store, func(w http.ResponseWriter, r *http.Request, user user.User) {
+	log.Println("SavetHandlerImpl called")
 	saveti, _ := savet.List()
-
 	encoder := json.NewEncoder(w)
 	encoder.Encode(saveti)
+})
 
-}
+//var SavetHandler = secure.SecureHandler(Store, w, r , SavetHandlerImpl)
 
-func SaveSavetHandler(w http.ResponseWriter, r *http.Request) {
+var SaveSavetHandler = secure.SecureHandler(Store, func(w http.ResponseWriter, r *http.Request, user user.User) {
 	decoder := json.NewDecoder(r.Body)
 	var s savet.Savet
 	err := decoder.Decode(&s)
@@ -141,17 +113,17 @@ func SaveSavetHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.NotFound(w, r)
 	}
-}
+})
 
-func GetSavetHandler(w http.ResponseWriter, r *http.Request) {
+var GetSavetHandler = secure.SecureHandler(Store, func(w http.ResponseWriter, r *http.Request, user user.User) {
 	vars := mux.Vars(r)
 	id, _ := strconv.ParseInt(vars["id"], 10, 64)
 	savet := savet.Get(id)
 	encoder := json.NewEncoder(w)
 	encoder.Encode(savet)
-}
+})
 
-func GetStanariHandler(w http.ResponseWriter, r *http.Request) {
+var GetStanariHandler = secure.SecureHandler(Store, func(w http.ResponseWriter, r *http.Request, user user.User) {
 	vars := mux.Vars(r)
 	savetId, _ := strconv.ParseInt(vars["savetId"], 10, 64)
 	savet, err := stanari.Get(savetId)
@@ -161,4 +133,4 @@ func GetStanariHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	encoder := json.NewEncoder(w)
 	encoder.Encode(savet)
-}
+})
