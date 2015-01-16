@@ -1,12 +1,12 @@
 package web
 
 import (
-	"aivan/savet5/db/savet"
-	"aivan/savet5/db/stanari"
-	"aivan/savet5/db/user"
-	"aivan/savet5/web/secure"
 	"encoding/json"
 	"fmt"
+	"github.com/ivanarandjelovic/savet5/db/savet"
+	"github.com/ivanarandjelovic/savet5/db/stanari"
+	"github.com/ivanarandjelovic/savet5/db/user"
+	"github.com/ivanarandjelovic/savet5/web/secure"
 	//"github.com/dchest/uniuri"
 	"encoding/gob"
 	"github.com/gorilla/mux"

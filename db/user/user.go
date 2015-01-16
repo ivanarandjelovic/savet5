@@ -2,9 +2,9 @@ package user
 
 import (
 	//	"fmt"
-	. "aivan/savet5/db"
-	"log"
 	"errors"
+	. "github.com/ivanarandjelovic/savet5/db"
+	"log"
 )
 
 // User object

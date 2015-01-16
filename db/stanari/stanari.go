@@ -2,8 +2,8 @@ package stanari
 
 import (
 	//	"fmt"
-	. "aivan/savet5/db"
 	"errors"
+	. "github.com/ivanarandjelovic/savet5/db"
 	"log"
 )
 

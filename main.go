@@ -1,10 +1,10 @@
 package main
 
 import (
-	. "aivan/savet5/db"
-	"aivan/savet5/web"
-	"aivan/savet5/web/live"
-	//"aivan/savet5/web/secure"
+	. "github.com/ivanarandjelovic/savet5/db"
+	"github.com/ivanarandjelovic/savet5/web"
+	"github.com/ivanarandjelovic/savet5/web/live"
+	//"github.com/ivanarandjelovic/savet5/web/secure"
 	"code.google.com/p/go.net/websocket"
 	"fmt"
 	"github.com/gorilla/context"

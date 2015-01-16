@@ -1,18 +1,18 @@
 package secure
 
 import (
-	"aivan/savet5/db/user"
+	"code.google.com/p/go.net/websocket"
 	"github.com/gorilla/sessions"
+	"github.com/ivanarandjelovic/savet5/db/user"
 	"log"
 	"net/http"
-	"code.google.com/p/go.net/websocket"
 )
 
 type SecureHandlerType func(w http.ResponseWriter, r *http.Request, user user.User)
 type HandlerType func(w http.ResponseWriter, r *http.Request)
 
-type SecureWSHandlerType func (ws *websocket.Conn, user user.User)
-type WSHandlerType func (ws *websocket.Conn)
+type SecureWSHandlerType func(ws *websocket.Conn, user user.User)
+type WSHandlerType func(ws *websocket.Conn)
 
 /*
 	Wrap regular handler in a check if user has valid session, and provide the user to the wrapped handler
@@ -38,11 +38,11 @@ func SecureHandler(store *sessions.FilesystemStore, handler SecureHandlerType) H
 	}
 }
 
-/* 
+/*
 	Wrap regular handler in a check if user has valid session, and provide the user to the wrapped handler
 */
 func SecureWSHandler(store *sessions.FilesystemStore, handler SecureWSHandlerType) WSHandlerType {
-	return func (ws *websocket.Conn) {
+	return func(ws *websocket.Conn) {
 
 		log.Println("SecureWSHandler checking for user")
 

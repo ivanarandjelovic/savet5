@@ -1,10 +1,10 @@
 package live
 
 import (
-	"aivan/savet5/db/user"
-	"aivan/savet5/web"
-	"aivan/savet5/web/secure"
 	"code.google.com/p/go.net/websocket"
+	"github.com/ivanarandjelovic/savet5/db/user"
+	"github.com/ivanarandjelovic/savet5/web"
+	"github.com/ivanarandjelovic/savet5/web/secure"
 	//	"io"
 	"fmt"
 	"log"
