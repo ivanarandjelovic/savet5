@@ -15,7 +15,11 @@
           templateUrl: "/html/templates/stanari/stanari.html",
           controller: controllers.StanariCtrl,
           resolve: userResolve
-        });
+        }).when("/stanari/create/:savetId", {
+          templateUrl: "/html/templates/stanari/create.html",
+          controller: controllers.SavetiCtrl,
+          resolve: userResolve
+        });;
       }
     ]);
     return mod;

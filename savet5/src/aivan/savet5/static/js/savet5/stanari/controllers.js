@@ -20,6 +20,10 @@
       $scope.savet = Savet.get({
         id: savetId
       });
+	  $scope.showCreate = function() {
+        return $location.path("/stanari/create/"+savetId);
+      };
+
       return $scope.stanari = Stanari.query({
         savetId: $routeParams.savetId
       });

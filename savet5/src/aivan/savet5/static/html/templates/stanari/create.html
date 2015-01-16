@@ -1,0 +1,24 @@
+<div class="page-header">
+	<h1>Dodaj novog stanara</h1>
+</div>
+		<div class="alert alert-warning alert-dismissable" ng-show="loginFailure">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			<strong>Upozorenje!</strong> TODO: ....
+		</div>
+<form name="form">
+	<fieldset>
+		<div class="form-group" ng-class="{ 'has-error' : form.name.$invalid  && !form.name.$pristine }">
+			<label for="name">Ime stanara</label> <input type="text" name="name"
+				class="form-control" autofocus="autofocus" ng-model="stanar.name"
+				placeholder="Ime" required autocomplete="off" />
+		</div>
+		<div class="form-group" ng-class="{ 'has-error' : form.address.$invalid  && !form.address.$pristine }">
+			<label for="address">Prezime stanara</label> <input type="text" name="prezime"
+				class="form-control" ng-model="stanar.lastName"
+				placeholder="Prezime" required />
+		</div>
+		<button class="btn btn-primary" ng-disabled="form.$invalid"
+			ng-click="create(stanar)">Dodaj stanara</button>
+	</fieldset>
+</form>
