@@ -6,14 +6,14 @@ CREATE TABLE Users (
     id bigint(20) NOT NULL AUTO_INCREMENT,
     email varchar(255) NOT NULL,
     password varchar(255) not null,
-    firstName varchar(255) NOT NULL,
-    lastName varchar(255) NOT NULL,
+    first_name varchar(255) NOT NULL,
+    last_name varchar(255) NOT NULL,
     description varchar(255) NOT NULL,
     role varchar(255) not null default 'OPERATOR',
     PRIMARY KEY (id)
 );
 
-insert into Users(email, password, firstName, lastName, description,role) values ('a@a.a','1','Test','Tester','Bogotac','GOD');
+insert into Users(email, password, first_name, last_name, description,role) values ('a@a.a','1','Test','Tester','Bogotac','GOD');
 
 # DROP TABLE Users;
 
