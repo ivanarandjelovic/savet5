@@ -17,7 +17,7 @@
           resolve: userResolve
         }).when("/stanari/create/:savetId", {
           templateUrl: "/html/templates/stanari/create.html",
-          controller: controllers.SavetiCtrl,
+          controller: controllers.StanariCtrl,
           resolve: userResolve
         });;
       }

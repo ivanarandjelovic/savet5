@@ -27,7 +27,7 @@
       $scope.showCreate = function() {
         return $location.path("/saveti/create");
       };
-      return $scope.create = function(savet) {
+      $scope.create = function(savet) {
         var savetNew;
         savetNew = new Savet(savet);
         return savetNew.$save(null, function(savedSavet) {

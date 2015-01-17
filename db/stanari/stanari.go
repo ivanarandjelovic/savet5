@@ -29,3 +29,11 @@ func Get(savetId int64) ([]Stanar, error) {
 	log.Println("stanari: ", stanari)
 	return stanari, nil
 }
+
+func Create(stanar Stanar) error {
+	DB.Save(&stanar)
+	if stanar.Id == 0 {
+		return errors.New("Stanar save failed!")
+	}
+	return nil
+}

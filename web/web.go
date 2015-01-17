@@ -134,3 +134,20 @@ var GetStanariHandler = secure.SecureHandler(Store, func(w http.ResponseWriter, 
 	encoder := json.NewEncoder(w)
 	encoder.Encode(savet)
 })
+
+var SaveStanarHandler = secure.SecureHandler(Store, func(w http.ResponseWriter, r *http.Request, user user.User) {
+	decoder := json.NewDecoder(r.Body)
+	var s stanari.Stanar
+	err := decoder.Decode(&s)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Println("SaveStanarHandler called with Stanar:", s)
+
+	err = stanari.Create(s)
+
+	if err != nil {
+		http.NotFound(w, r)
+	}
+})

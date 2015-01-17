@@ -20,15 +20,29 @@
       $scope.savet = Savet.get({
         id: savetId
       });
+
 	  $scope.showCreate = function() {
         return $location.path("/stanari/create/"+savetId);
       };
 
-      return $scope.stanari = Stanari.query({
+      $scope.stanari = Stanari.query({
         savetId: $routeParams.savetId
       });
+		
+      $scope.create = function(stanar) {
+ 		var stanarNew;
+        stanarNew = new Stanari(stanar);
+		stanarNew.savetId = savetId;
+        return stanarNew.$save(null, function(savedStanar) {
+          $scope.stanar = Stanari.query();
+          return $location.path("/stanari/"+savetId);
+        });
+	   };
+
     };
+
     StanariCtrl.$inject = ["$scope", "$location", "$routeParams", "$resource"];
+
     return {
       StanariCtrl: StanariCtrl
     };
