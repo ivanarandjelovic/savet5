@@ -46,6 +46,7 @@ func main() {
 	r.HandleFunc("/savet/{id}", web.GetSavetHandler).Methods("GET")
 
 	r.HandleFunc("/stanari/{savetId}", web.GetStanariHandler).Methods("GET")
+	r.HandleFunc("/stanari/{savetId}", web.SaveStanarHandler).Methods("POST")
 
 	r.Handle("/live/getSecured", websocket.Handler(live.WebSocketHandler))
 
