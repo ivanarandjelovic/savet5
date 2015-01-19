@@ -32,7 +32,7 @@
       $scope.create = function(stanar) {
  		var stanarNew;
         stanarNew = new Stanari(stanar);
-		stanarNew.savetId = savetId;
+		stanarNew.savetId = new Number(savetId);
         return stanarNew.$save(null, function(savedStanar) {
           $scope.stanar = Stanari.query();
           return $location.path("/stanari/"+savetId);
