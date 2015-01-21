@@ -1,8 +1,0 @@
-go get github.com/jinzhu/gorm
-go get github.com/gorilla/mux
-go get github.com/go-sql-driver/mysql
-go get github.com/gorilla/context
-go get github.com/gorilla/schema
-go get github.com/gorilla/sessions
-go get code.google.com/p/go.net
-go get code.google.com/p/go.text

@@ -1,0 +1,3 @@
+CREATE SCHEMA 'savet5';
+CREATE USER 'savet5'@'%' IDENTIFIED BY 'savet5';
+GRANT ALL PRIVILEGES ON savet5.* TO 'savet5'@'%' WITH GRANT OPTION;
